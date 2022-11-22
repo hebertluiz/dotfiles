@@ -5,19 +5,22 @@
 - clean: ['~']
 
 - link:
-    ~/.vim: vim
+    ~/.vim/: 
+      path:  files/vim/*
+      glob: true
+      relink: true
+      force: true
     ~/.vimrc:
       relink: true
-      path: vimrc
+      path:   files/vimrc
     ~/.zshrc:
       force: true
       path: files/zshrc
     ~/.config/:
-      path: files/config/**
-    ~/:
       glob: true
-      path: files/*
-      prefix: '.'
+      path: files/config/*
+      relink: true
+
 
 - create:
     - ~/downloads

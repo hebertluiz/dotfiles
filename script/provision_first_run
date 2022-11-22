@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# shellcheck source-path=./script/
 source ./script/wait_process.sh
 
 
