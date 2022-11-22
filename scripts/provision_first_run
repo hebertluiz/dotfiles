@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./script/wait_process.sh
+source ./scripts/wait_process.sh
 
 
 STATUSFILE=~/.local/share/.dotfiles/status

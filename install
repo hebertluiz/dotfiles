@@ -8,7 +8,7 @@ DOTBOT_BIN="dotbot"
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 ## Running provision script 
-script/provision_first_run
+scripts/provision_first_run
 
 cd "${BASEDIR}"
 

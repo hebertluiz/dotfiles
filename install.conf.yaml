@@ -20,12 +20,16 @@
       glob: true
       path: files/config/*
       relink: true
-
+    ~/scripts/:
+      glob: true
+      path: scripts/**
+      relink: true
 
 - create:
     - ~/downloads
     - ~/.vim/undo-history
     - ~/workspace
+    - ~/scripts/
 
-# - shell:
+
 
