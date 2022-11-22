@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# shellcheck source-path=./script/
+source ./script/wait_process.sh
+
+
+STATUSFILE=~/.local/share/.dotfiles/status
+# arch="$(uname -m)"
+distro="$(lsb_release -i -s)"
+# dist_release="$(lsb_release -r -s)"
+
+function install_omz () {
+    ### Download from omz repo
+    if [ -n "${ZSH}" ]; then 
+        return 0
+    fi
+
+    sh -c "$(curl -fsSL \
+        https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    
+    return 0
+}
+
+
+function install_packages_ubuntu (){
+
+    local ubuntu_pkg_list=(
+        'git' 'zsh' 'vim'
+        'python3' 'curl'
+        'lastpass-cli'
+        'fzf'
+    )
+
+    sudo apt update -qq -y >/dev/null 2>&1 & 
+    wait_process $! "Waiting for package update"
+
+    printf 'Package list:\n' >&2
+    printf ' * %s\n' "${ubuntu_pkg_list[@]}" >&2
+    sudo apt install -qq -y "${ubuntu_pkg_list[@]}" >/dev/null 2>&1 & 
+    wait_process $! "Installing packages"
+
+    sudo pip install -U pip
+    sudo pip install dotbot
+
+}
+
+function check_sudo () {
+    
+    ### Is root
+    if [ "$(id -u)" = '0' ]; then 
+        printf 'Already root proceeding...\n' >&2
+        return 0
+    fi
+
+    printf 'Checking user permissions...\n' >&2
+    ### Try to cache sudo credentials
+    if ! sudo -v; then
+        printf 'Not SuperUser, run as root or with sudoers allowed user\n' >&2
+        exit 1
+    fi
+
+    printf 'Cached sudo credentials...\n' >&2
+    return 0
+}
+
+function check_run_date (){
+    if [ -r ~/.local/share/.dotfiles/status ]; then 
+        STATUS=$(<${STATUSFILE})
+        return 0
+    fi 
+    return 1
+}
+
+function main () {
+
+    if check_run_date; then
+        printf 'Already provioned\n'
+        if [ -n "${STATUS}" ]; then
+            printf -- 'Provisioned at %s\n' "$(date +"%D - %T" -d"${STATUS}")"
+        fi
+        return 0
+    fi
+
+    check_sudo
+
+    ### Running installer
+    if [ "${distro}" = 'Ubuntu' ];then
+        install_packages_ubuntu
+    fi
+    
+    install_omz
+
+    
+}
+
+if [ "$(basename -- "$0")" = 'provision_first_run' ]; then 
+    main "$@"
+    mkdir ~/.local/share/.dotfiles/
+    date +"@%s" > ~/.local/share/.dotfiles/status
+    exit 0 
+fi

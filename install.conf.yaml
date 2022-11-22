@@ -1,0 +1,28 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.vim: vim
+    ~/.vimrc:
+      relink: true
+      path: vimrc
+    ~/.zshrc:
+      force: true
+      path: files/zshrc
+    ~/.config/:
+      path: files/config/**
+    ~/:
+      glob: true
+      path: files/*
+      prefix: '.'
+
+- create:
+    - ~/downloads
+    - ~/.vim/undo-history
+    - ~/workspace
+
+# - shell:
+
