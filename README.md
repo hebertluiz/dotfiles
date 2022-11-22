@@ -23,13 +23,13 @@ chmod +x ./install ./script/provision_first_run
 ### Fedora
 
 ```shell
-    sudo dnf install -y git
-    mkdir -p ~/repo/; cd ~/repo/
+sudo dnf install -y git
+mkdir -p ~/repo/; cd ~/repo/
 
-    git clone https://github.com/hebertluiz/dotfiles
-    cd dotfiles
-    chmod +x ./install ./script/provision_first_run
+git clone https://github.com/hebertluiz/dotfiles
+cd dotfiles
+chmod +x ./install ./script/provision_first_run
 
-    ./install
+./install
 
 ```
