@@ -93,11 +93,20 @@ function check_run_date (){
 }
 
 function run_dotbot () {
-    if ! check_bin "${DOTBOT_BIN}"; then 
-        exit 2
-    fi
+    local dotbot_path="$(which ${DOTBOT_BIN})"
 
-    "${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" 
+    if [! -x "${dotbot_path}" ]; then 
+       printf 'Dotbot not found.\n' "${dotbot_path}" >&2
+       return 1
+    fi 
+
+
+    pushd "${BASEDIR}"
+
+    printf 'Running dotbot: %s\n' "${dotbot_path}" >&2
+    "${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}"
+
+    popd
     return 0
 }
 
