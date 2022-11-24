@@ -14,7 +14,7 @@ mkdir -p ~/repo/; cd ~/repo/
 git clone https://github.com/hebertluiz/dotfiles
 
 cd dotfiles
-chmod +x ./install ./script/provision_first_run
+chmod +x ./install ./scripts/provision_first_run
 
 ./install
 
@@ -28,7 +28,7 @@ mkdir -p ~/repo/; cd ~/repo/
 
 git clone https://github.com/hebertluiz/dotfiles
 cd dotfiles
-chmod +x ./install ./script/provision_first_run
+chmod +x ./install ./scripts/provision_first_run
 
 ./install
 

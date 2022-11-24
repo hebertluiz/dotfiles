@@ -15,7 +15,8 @@ function install_omz () {
     fi
 
     sh -c "$(curl -fsSL \
-        https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+        --unattended
     
     return 0
 }
@@ -24,10 +25,9 @@ function install_omz () {
 function install_packages_ubuntu (){
 
     local ubuntu_pkg_list=(
-        'git' 'zsh' 'vim'
-        'python3' 'curl'
-        'lastpass-cli'
-        'fzf'
+        'git' 'zsh' 'vim' 'curl'
+        'python3' 'python3-pip' 
+        'lastpass-cli' 'fzf'
     )
 
     sudo apt update -qq -y >/dev/null 2>&1 & 
@@ -70,6 +70,13 @@ function check_run_date (){
     return 1
 }
 
+function run_dotbot () {
+    if [ -x "${DOTBOT_BIN}" ]; then 
+        exec
+    "${DOTBOT_BIN}" -d "${BASEDIR}" -c "${CONFIG}" 
+}
+
+
 function main () {
 
     if check_run_date; then
@@ -89,12 +96,22 @@ function main () {
     
     install_omz
 
-    
+    mkdir ~/.local/share/.dotfiles/
+    date +"@%s" > ~/.local/share/.dotfiles/status
+
+    run_dotbot 
+
+    ### Running zsh if everything is OK
+    zsh_path="$(which zsh)"
+    if [ -x "${zsh_path}" ]; then
+        printf 'Iniciando ZSH:%s\n' "${zsh_path}"
+        ${zsh_path}
+    fi
+
+
 }
 
 if [ "$(basename -- "$0")" = 'provision_first_run' ]; then 
     main "$@"
-    mkdir ~/.local/share/.dotfiles/
-    date +"@%s" > ~/.local/share/.dotfiles/status
     exit 0 
 fi
