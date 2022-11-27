@@ -28,6 +28,11 @@ chmod +x ./install ./scripts/provision_first_run
 ### Fedora
 
 ```shell
+## Setup git login data
+USER_EMAIL="user@domain"
+USER_NAME="git_username"
+export USER_EMAIL USER_NAME
+
 sudo dnf install -y git
 mkdir -p ~/repo/; cd ~/repo/
 
