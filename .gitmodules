@@ -1,0 +1,3 @@
+[submodule "scripts/bash_fun"]
+	path = scripts/bash_fun
+	url = https://github.com/hebertluiz/bash_fun
