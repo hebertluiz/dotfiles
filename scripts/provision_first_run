@@ -129,8 +129,8 @@ function main () {
 
     ### Running zsh if everything is OK
     if check_bin zsh; then
-        printf 'Iniciando ZSH:%s\n' "${zsh_path}"
-        ${zsh_path}
+        printf 'Iniciando ZSH:%s\n' "zsh"
+        zsh
     fi
 
 }
