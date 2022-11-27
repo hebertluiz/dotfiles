@@ -1,16 +1,15 @@
 
-source ~/scripts/wait_process.sh
+#source ~/scripts/wait_process.sh
 #### APT functions
 
 function aptu () {
-    sudo apt update -y -q 2>&1 >/dev/null &
-    wait_process $! "Waiting for package update"
+    sudo -v
+    sudo apt update -qqy
 }
 
 function apti () {
-
+    sudo -v 
     printf 'Installing Packages:\n' >&2
     printf '\t* %s\n' "$@" 
-    sudo apt install "$@" -y -q 2>&1 >/dev/null &
-    wait_process $! "Waiting for package update"
+    sudo apt install "$@" -qy    
 }

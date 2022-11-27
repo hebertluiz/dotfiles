@@ -9,6 +9,7 @@
     - ~/workspace/
     - ~/scripts/
     - ~/.config/
+    - ~/.vim/
 
 - create:
     ~/.ssh:

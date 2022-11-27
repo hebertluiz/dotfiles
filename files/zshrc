@@ -90,13 +90,12 @@ source_scripts=(
 )
 
 for source_script in "${source_scripts[@]}"; do
-  file ${source_script}
   if [ ! -r "${source_script}" ] && [ ! -h "${source_script}" ] ; then
     printf 'Cannot load file %s\n' "${source_script}" >&2
     continue
   fi
 
-  source "${source_scripts}"
+  source "${source_script}"
 done 
 
 # export MANPATH="/usr/local/man:$MANPATH"
