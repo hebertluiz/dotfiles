@@ -2,10 +2,11 @@
 
 set -e
 
-USER_EMAIL='hebert.luiz.hb@gmail.com'
-USER_NAME='hebertluiz'
- 
+USER_EMAIL="${USER_EMAIL:-${USER}@domain}"
+USER_NAME="${USER_NAME:-${USER}}"
 
+echo "USER_EMAIL=${USER_EMAIL}"
+echo "USER_NAME=${USER_NAME}"
 
 CONFIG="install.conf.yaml"
 
@@ -22,8 +23,8 @@ cd "${BASEDIR}"
 
 
 envfiles=(
-    '~/.zshenv'
-    '~/.bash_profile'
+    "${HOME}/.zshenv"
+    "${HOME}/.bash_profile"
 )
 
 for envfile in "${envfiles[@]}"; do
