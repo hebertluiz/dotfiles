@@ -12,11 +12,11 @@ USER_EMAIL="user@domain"
 USER_NAME="git_username"
 export USER_EMAIL USER_NAME
 
-sudo apt update -y
-sudo apt install -y git
+sudo apt update -qqy
+sudo apt install -qqy git
 mkdir -p ~/repo/; cd ~/repo/
 
-git clone https://github.com/hebertluiz/dotfiles
+git clone --quiet https://github.com/hebertluiz/dotfiles
 
 cd dotfiles
 chmod +x ./install ./scripts/provision_first_run
@@ -33,10 +33,10 @@ USER_EMAIL="user@domain"
 USER_NAME="git_username"
 export USER_EMAIL USER_NAME
 
-sudo dnf install -y git
+sudo dnf install -qqy git
 mkdir -p ~/repo/; cd ~/repo/
 
-git clone https://github.com/hebertluiz/dotfiles
+git clone --quiet https://github.com/hebertluiz/dotfiles
 cd dotfiles
 chmod +x ./install ./scripts/provision_first_run
 
