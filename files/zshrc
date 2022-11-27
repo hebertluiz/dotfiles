@@ -87,6 +87,7 @@ source $ZSH/oh-my-zsh.sh
 source_scripts=(
   "${HOME}/.config/aliases"
   "${HOME}/.config/functions"
+  "${HOME}/.zshenv"
 )
 
 for source_script in "${source_scripts[@]}"; do
@@ -121,3 +122,4 @@ fi
 # Example aliases
 alias zshconfig="${EDITOR} ~/.zshrc"
 alias ohmyzsh="${EDITOR} ~/.oh-my-zsh"
+alias zshreload="source ~/.zshrc"
