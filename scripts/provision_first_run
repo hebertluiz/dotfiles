@@ -21,15 +21,15 @@ function check_bin () {
 function install_omz () {
     ### Download from omz repo
     if [ -n "${ZSH}" ]; then 
+        printf 'OMZ already installed...\n' >&2
         return 0
     fi
+    
+    printf 'Installing OMZ...\n' >&2
 
-    
-     
-    
     wget -q "https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"\
         -O /tmp/install.sh     
-    CHSH=yes RUNZSH=no bash /tmp/install.sh 
+    bash /tmp/install.sh --unattended 
     rm /tmp/install.sh
     return 0
 }
