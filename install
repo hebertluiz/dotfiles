@@ -2,14 +2,45 @@
 
 set -e
 
+USER_EMAIL='hebert.luiz.hb@gmail.com'
+USER_NAME='hebertluiz'
+ 
+
+
 CONFIG="install.conf.yaml"
 
 DOTBOT_BIN="dotbot"
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-export CONFIG BASEDIR DOTBOT_BIN
+export CONFIG BASEDIR DOTBOT_BIN USER_EMAIL USER_NAME
 
 ## Running provision script 
 scripts/provision_first_run
 
 cd "${BASEDIR}"
+
+
+
+envfiles=(
+    '~/.zshenv'
+    '~/.bash_profile'
+)
+
+for envfile in "${envfiles[@]}"; do
+
+    if [ ! -f "${envfile}" ] \
+        || ! grep -E "^export USER_NAME=" ${envfile} -q; then
+
+        printf '## Git UserName config' >> "${envfile}"  
+        printf 'export USER_NAME="%s"\n' "${USER_NAME}" >> "${envfile}"  
+    fi
+
+    if [ ! -f "${envfile}" ] \
+        || ! grep -E "^export USER_EMAIL=" ${envfile} -q; then
+
+        printf '## Git UserEmail config' >> "${envfile}"  
+        printf 'export USER_EMAIL="%s"\n' "${USER_EMAIL}" >> "${envfile}"  
+    fi
+
+
+done

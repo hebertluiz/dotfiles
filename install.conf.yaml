@@ -4,6 +4,21 @@
 
 - clean: ['~']
 
+
+- create:
+    - ~/workspace/
+    - ~/scripts/
+    - ~/.config/
+
+- create:
+    ~/.ssh:
+      mode: 0700
+
+
+- shell:
+  - [ git fetch --prune, Updating from remote... ]
+  
+
 - link:
     ~/.vim/: 
       path:  files/vim/*
@@ -24,12 +39,4 @@
       glob: true
       path: scripts/**
       relink: true
-
-- create:
-    - ~/downloads
-    - ~/.vim/undo-history
-    - ~/workspace
-    - ~/scripts/
-
-
 

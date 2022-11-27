@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 
 ### Custom aliases for me
 alias       lfun='source ~/.config/functions'
