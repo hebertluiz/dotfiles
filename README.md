@@ -7,6 +7,10 @@ Install git and clone the repository
 ### Ubuntu
 
 ```shell
+## Setup git login data
+USER_EMAIL="user@domain"
+USER_NAME="git_username"
+
 sudo apt update -y
 sudo apt install -y git
 mkdir -p ~/repo/; cd ~/repo/
@@ -23,6 +27,10 @@ chmod +x ./install ./scripts/provision_first_run
 ### Fedora
 
 ```shell
+## Setup git login data
+USER_EMAIL="user@domain"
+USER_NAME="git_username"
+
 sudo dnf install -y git
 mkdir -p ~/repo/; cd ~/repo/
 
@@ -33,3 +41,8 @@ chmod +x ./install ./scripts/provision_first_run
 ./install
 
 ```
+
+
+## TODO 
+- Bootstrap script 
+- Migrate all rules/scripts to dotbot
