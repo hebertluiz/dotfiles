@@ -1,0 +1,9 @@
+#!/bin/bash 
+
+printf 'Downloading Setup...\n' >&2
+wget -q https://apt.devkitpro.org/install-devkitpro-pacman \
+    -O /tmp/install-devkitpro-pacman
+
+printf 'Running Setup...\n'
+chmod +x ./install-devkitpro-pacman
+sudo ./install-devkitpro-pacman

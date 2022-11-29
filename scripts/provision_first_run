@@ -116,6 +116,7 @@ function main () {
     if check_run_date; then
         printf 'Already provioned\n'
         if [ -n "${STATUS}" ]; then
+            run_dotbot
             printf -- 'Provisioned at %s\n' "$(date +"%D - %T" -d"${STATUS}")"
         fi
         return 0

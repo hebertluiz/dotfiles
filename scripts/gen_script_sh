@@ -1,0 +1,78 @@
+#!/bin/bash
+
+## Generate a shellscript file from Boilerplate
+#+ Author: Hebert Silva 
+#@ Date: 24/11/2022 - 18:05
+
+### Globals
+#
+LOCAL_PATH="${2:-${HOME}/scripts}"
+SCRIPT_NAME=${1,,}
+
+SCRIPT_BOILERPLATE=$(cat << "EOF"
+#!/bin/bash
+
+## <Script_Description>
+#+ Author: AUTHORNAME
+#@ Date: CURRENTDATE
+
+### Globals
+#
+
+### Functions
+#
+
+### Output Functions
+log { printf -- '| %s --: %bget.' $(date +"%D - %T ") "$@" >&2}
+err { printf -- '| %s --: %b.' $(date +"%D - %T ") "$@" >&2}
+
+
+### Main Function
+#
+function main () {
+
+    ### Help Section
+    if [ "$1" = '-h' ] || [ "$1" = "--help" ]; then
+        desc=$(grep '^#[#+@] ' $0 | sed -e 's/#[#+@] //g' )
+        printf "%s\n\n" "${desc}" >&2
+	  ### Add Extra help messages Here
+        exit 0
+    fi
+    
+
+    return 0
+}
+
+### Execution Section
+#
+main "$@"
+
+exit 0
+EOF
+)
+
+echo "${SCRIPT_BOILERPLATE}"
+
+### Functions
+#
+
+### Main Function
+#
+function main () {
+
+    ### Help Section
+    if [ "$1" = '-h' ] || [ "$1" = "--help" ]; then
+        desc=$(grep '^#[#+@] ' $0 | sed -e 's/#[#+@] //g' )
+        printf "%s\n\n" "${desc}" >&2
+	  ### Add Extra help messages Here
+        exit 0
+    fi
+    
+
+    return 0
+}
+
+### Execution Section
+#
+main "$@"
+
