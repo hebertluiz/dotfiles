@@ -5,5 +5,7 @@ wget -q https://apt.devkitpro.org/install-devkitpro-pacman \
     -O /tmp/install-devkitpro-pacman
 
 printf 'Running Setup...\n'
-chmod +x ./install-devkitpro-pacman
-sudo ./install-devkitpro-pacman
+chmod +x /tmp/install-devkitpro-pacman
+sudo /tmp/install-devkitpro-pacman
+
+rm -f /tmp/install-devkitpro-pacman
