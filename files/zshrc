@@ -88,6 +88,7 @@ source_scripts=(
   "${HOME}/.config/aliases"
   "${HOME}/.config/functions"
   "${HOME}/.zshenv"
+  "${HOME}/.config/wslenv"
 )
 
 for source_script in "${source_scripts[@]}"; do

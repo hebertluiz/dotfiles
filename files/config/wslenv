@@ -1,0 +1,25 @@
+#!/bin/sh
+
+get_winvar (){
+    cmd.exe /c echo $1 2> /dev/null | tr -d '\r' | xargs -0 wslpath
+}
+
+ssh_refresh () {
+    printf 'Copying .ssh files from Windows to WSL...' >&2
+    \rsync -az ${WIN_HOME}/.ssh ~/.ssh >&2
+    printf ' Done\n' >&2
+}
+
+if [ -n "${WSLENV}" ]; then
+    WIN_ROOT=/mnt/c
+    WIN_USER="$(get_winvar %USERNAME%)"
+    WIN_HOME="$(get_winvar %USERPROFILE%)"
+
+    # Syncronizing .ssh 
+    if [ -d "${WIN_HOME}/.ssh/" ]; then
+        ssh_refresh
+    fi
+fi
+
+
+

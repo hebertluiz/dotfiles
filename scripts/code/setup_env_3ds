@@ -9,3 +9,8 @@ chmod +x /tmp/install-devkitpro-pacman
 sudo /tmp/install-devkitpro-pacman
 
 rm -f /tmp/install-devkitpro-pacman
+
+source /etc/profile.d/devkit-env.sh
+
+sudo dpkg-pacman -Su 
+sudo dpkg-pacman -Sy 3ds-dev
