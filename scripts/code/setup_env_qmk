@@ -120,13 +120,13 @@ function qmk_vscode () {
         ))
 
     printf 'Opening VSCode...\n' >&2
-    #code ${qmk_repo}
+    code ${qmk_repo}
     sleep 2
     
     printf 'Opening files for %s:\n' "${KB_VARIANT}" >&2
     printf -- '  ->  %s\n' "${kb_files[@]##*${KB_VARIANT}/}" \
         |sed 's#/# / #g' >&2
-    #code -r "${kb_files[@]}" 
+    code -r "${kb_files[@]}" 
 }
 
 
