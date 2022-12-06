@@ -6,7 +6,8 @@ get_winvar (){
 
 ssh_refresh () {
     printf 'Copying .ssh files from Windows to WSL...' >&2
-    \rsync -az ${WIN_HOME}/.ssh ~/.ssh >&2
+    \rsync -az ${WIN_HOME}/.ssh ~/ --exclude 'config'>&2
+    chmod og-xrw ~/.ssh/ -R
     printf ' Done\n' >&2
 }
 

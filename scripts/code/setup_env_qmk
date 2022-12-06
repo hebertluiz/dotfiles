@@ -1,0 +1,197 @@
+#!/bin/bash
+#
+
+### GLOBALS
+#
+ARGS=(
+    "-h" "--help"
+    "-f" "--function"
+    "-c" "--compgen"
+)
+HELP_MSG='
+Setup script for qmk installer
+  * Usage: $0 [option] [function]
+  * Options:
+    --help      Show this help message
+    -h
+    --function  Call a function
+    -f
+    --compgen   Output a space separated list of available functions
+    -c
+
+
+  * Functions
+'
+
+# OS SPECIFICS
+UBUNTU_QMK_DEPS=(
+    "git" "python3-pip"
+)
+
+# QMK SETUP INFO
+FW_USER='SonixQMK'
+FW_REPO='qmk_firmware'
+FW_BRANCH='sn32_master'
+
+# QMK COMPILE INFO
+## keychron/k4/rgb/v2/via
+## default_ansi
+KB_VENDOR='keychron'
+KB_MODEL='k4'
+KB_VARIANT='rgb/v2'
+FW_TYPE='via'
+
+KB_KEYMAP='default_ansi'
+KB_NAME="${KB_VENDOR}/${KB_MODEL}/${KB_VARIANT}/${FW_TYPE}"
+export KB_VENDOR KB_MODEL KB_VARIANT FW_TYPE KB_KEYMAP KB_NAME
+
+
+COMPILE_ARGS=(
+    "--parallel" "$(grep -i '^processor' /proc/cpuinfo |wc -l)"
+)
+
+export COMPILE_ARGS
+
+function install_deps_ubuntu () {
+    printf 'Installing dependencies...\n' >&2
+    sleep 2
+    sudo apt-get install -qqy "${UBUNTU_QMK_DEPS[@]}" 2>&1 >/dev/null
+}
+
+function install_qmk () {
+    printf 'Installing QMK-Cli...\n' >&2
+    python3 -m pip install -U --user qmk 2>&1 >/dev/null
+}
+
+function setup_sonixQMK () {
+
+    printf 'Setting up QMK Home...\n' >&2
+    qmk config user.qmk_home="${HOME}/repo/qmk_firmware" 
+    sleep 1
+    
+
+    printf 'Intalling SonixQMK...\n' >&2
+    qmk setup "${FW_USER}/${FW_REPO}" -b ${FW_BRANCH}
+    sleep 2
+    
+    if ! grep "${KB_NAME}" <(qmk list-keyboards) 2>/dev/null; then
+        printf 'Keyboard "%s" not found\n' \
+            "${KB_NAME}" >&2
+    else
+        printf 'Configuring defaults...\n' >&2
+
+        qmk config user.keyboard="${KB_NAME}" \
+                    user.keymap="${KB_KEYMAP}" 2>&1 >/dev/null
+        sleep 1
+    fi
+    sleep 1
+}
+
+function compile_qmk_fw () {
+    printf 'Compiling keyboard Firmware...\n' >&2
+    grep -E "\[user\]" $(find ~ -name qmk.ini) -A 5 \
+        |grep -E "^keymap|^keyboard" \
+        |cut -d . -f 2 \
+        |column -t  -s\= -o ' => '
+
+    printf '\n\n# qmk compile %s\n' "${COMPILE_ARGS[*]}"
+
+
+
+    read -n 1 -p 'Do you want to compile with the parameters above? [y/N]: '
+    printf '\n' >&2
+
+    if ! [ "${REPLY,,}" = 'y' ]; then
+        printf '\n Aborted!!!\n\n' >&2
+        return 2
+    fi
+
+    qmk compile "${COMPILE_ARGS[@]}"
+
+}
+
+function qmk_vscode () {
+
+    local qmk_repo="$(find ~ -type d -name qmk_firmware)"
+    local kb_files=($(
+        find ${qmk_repo}/keyboards/${KB_VENDOR}/${KB_MODEL}/${KB_VARIANT} \
+            -type f \
+            | grep -Ev "_iso|optical|json|readme.md"
+        ))
+
+    printf 'Opening VSCode...\n' >&2
+    #code ${qmk_repo}
+    sleep 2
+    
+    printf 'Opening files for %s:\n' "${KB_VARIANT}" >&2
+    printf -- '  ->  %s\n' "${kb_files[@]##*${KB_VARIANT}/}" \
+        |sed 's#/# / #g' >&2
+    #code -r "${kb_files[@]}" 
+}
+
+
+### Main
+function main () {
+    distro="$(lsb_release -i -s)"
+
+    case "${distro}" in
+        Ubuntu)
+            install_deps_ubuntu
+        ;;
+        *)
+            printf 'Linux %s not supported...\n' "${distro}" >&2
+            return 1
+        ;;
+    esac
+
+    install_qmk
+    setup_sonixQMK
+    compile_qmk_fw
+
+}
+
+### Functions array
+_func_array=($(declare -F |grep -v main |cut -d \  -f 3))
+
+if [ "$(basename -- $0)" = "setup_env_qmk" ]; then
+    if [ $# -eq 0 ]; then
+        main "$@"
+        exit 0
+    fi
+
+    if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
+        printf '%s' "${HELP_MSG}" >&2
+
+        printf -- '    -> %s\n' "${_func_array[@]}" >&2
+    fi
+
+    if [ "$1" = '-c' ] || [ "$1" = '--compgen' ]; then
+        _qmk_func_args="${_func_array[*]}"
+        _setup_env_qmk_args="${ARGS[*]}" 
+        export _qmk_func_args _setup_env_qmk_args
+        
+        complete -W "${_setup_env_qmk_args}" -- "$0"
+        complete -W "${_qmk_func_args}" -- "$0 --function"
+        complete -W "${_qmk_func_args}" -- "$0 -f"
+
+        exit 0
+    fi
+
+    if [ "$(type -t $1)" = 'function' ]; then
+        $1
+        exit 0
+    fi
+
+    if [ "$1" = '-f' ] || [ "$1" = '--function' ]; then
+        if ! [ "$(type -t $2)" = 'function' ]; then
+            printf 'Invalid Function\n  * Functions\n' >&2
+            printf -- '    -> %s\n' "${_func_array[@]}" >&2
+            exit 1
+        fi
+
+        "$2"
+    fi
+
+    exit 0
+
+fi
