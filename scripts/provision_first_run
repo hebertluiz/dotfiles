@@ -95,7 +95,7 @@ function check_run_date (){
 function run_dotbot () {
     local dotbot_path="$(which ${DOTBOT_BIN})"
 
-    if [! -x "${dotbot_path}" ]; then 
+    if ! [ -x "${dotbot_path}" ]; then 
        printf 'Dotbot not found.\n' "${dotbot_path}" >&2
        return 1
     fi 
